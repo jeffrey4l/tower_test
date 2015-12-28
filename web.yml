@@ -1,0 +1,19 @@
+#!/usr/bin/env ansible-playbook
+
+- hosts: vagrant
+  sudo: True
+  vars:
+    - template_src: templates/index.html
+  tasks:
+    - debug: msg={{ ansible_default_ipv4['address'] }}
+  #      run_once: true
+      delegate_to: "{{ groups['vagrant'][0] }}"
+    #     - name: install nginx
+    #       yum: name=nginx
+    #       register: result
+    #     - name: copy index page
+    #       action: copy src={{ template_src }} dest=/usr/share/nginx/html/index.html
+    #       notify: restart nginx
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
